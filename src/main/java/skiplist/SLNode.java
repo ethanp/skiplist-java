@@ -59,7 +59,6 @@ class SLNode<T extends Comparable<T>> {
      * special version of the "floor(T)" for being run on the list head
      *
      * Returns null if the list is empty.
-     * Returns empty list if there are no less or equal elements.
      * Otw returns a list of prev nodes for all levels.
      */
     List<SLNode<T>> headFloor(T elem) {
@@ -86,12 +85,13 @@ class SLNode<T extends Comparable<T>> {
     private boolean containsStartingAtLevel(int i, T e) {
         for (; i >= 0; i--) {
             SLNode<T> nextNode = nextPointers.get(i);
-            if (nextNode.getElem() == null) {/*continue;*/
-            } else if (nextNode.getElem().compareTo(e) == 0) {
-                return true;
-            } else if (nextNode.getElem().compareTo(e) < 0) {
-                return nextNode.containsStartingAtLevel(i, e);
-            } /* else if next is greater than 0, continue iterating */
+            if (nextNode.getElem() != null) {
+                if (nextNode.getElem().compareTo(e) == 0) {
+                    return true;
+                } else if (nextNode.getElem().compareTo(e) < 0) {
+                    return nextNode.containsStartingAtLevel(i, e);
+                } /* else if next is greater than 0, continue iterating */
+            } /* else if next is tail, continue iterating */
         }
         return false;
     }
